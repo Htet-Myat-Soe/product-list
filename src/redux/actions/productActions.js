@@ -1,4 +1,21 @@
-import { ActionTypes } from "../contants/action-types"
+import axios from "axios";
+import { ActionTypes } from "../contants/action-types";
+
+export const fetchProducts = () => async (dispatch) => {
+        const response = await axios.get("https://fakestoreapi.com/products");
+        dispatch({
+            type : ActionTypes.FETCH_PRODUCTS,
+            payload : response.data
+        });
+}
+
+export const fetchProduct = (id) => async (dispatch) => {
+    const response = await axios.get("https://fakestoreapi.com/products/"+id);
+    dispatch({
+        type : ActionTypes.SELECTED_PRODUCTS,
+        payload : response.data
+    });
+}
 
 export const setProducts = (products) => {
     return {

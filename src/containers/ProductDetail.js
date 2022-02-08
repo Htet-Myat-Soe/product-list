@@ -1,8 +1,7 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { selectedProducts,removeSelectedProducts } from '../redux/actions/productActions';
+import { fetchProduct, removeSelectedProducts } from '../redux/actions/productActions';
 
 export const ProductDetail = () => {
 
@@ -13,20 +12,9 @@ export const ProductDetail = () => {
 
     const {id, title, image, category, description, price} = product;
 
-    const [isLoading,setIsLoading] = useState(true);
-
-    const fetchProductDetail= async () => {
-        const response = await axios.get("https://fakestoreapi.com/products/"+productId)
-        .catch(e => console.log(e.message));
-
-        dispatch(selectedProducts(response.data));
-        setIsLoading(false);
-
-    }
-
 
     useEffect(() => {
-        if(productId && productId !== "" ) fetchProductDetail();
+        if(productId && productId !== "" ) dispatch(fetchProduct(productId));
         return () => {
             dispatch(removeSelectedProducts());
         }
@@ -36,7 +24,7 @@ export const ProductDetail = () => {
   return (
       <>
         {
-            isLoading ? (<div>
+            !id ? (<div>
                     Loading....
             </div>)
             :  (<section className="text-gray-400 bg-gray-900 body-font overflow-hidden">
